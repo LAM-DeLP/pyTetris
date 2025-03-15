@@ -22,7 +22,8 @@ class Mino:
             self.minoVer.append(combined)
 
     def rotate(self):
-        pass
+        for i in range(len(self.minoVer)):
+            self.minoVer[i] = [-self.minoVer[i][1],self.minoVer[i][0]]
 
 class Board:
     def __init__(self,length,height):
@@ -44,6 +45,10 @@ if __name__ == '__main__':
     mino1 = Mino(3)
     mino1.self_generate()
     board1 = Board(10,20)
+    board1.assignMino(3,4,mino1.minoVer)
+    print(mino1.minoVer)
+    print(board1.grid)
+    mino1.rotate()
     board1.assignMino(3,4,mino1.minoVer)
     print(mino1.minoVer)
     print(board1.grid)
