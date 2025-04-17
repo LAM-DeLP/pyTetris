@@ -1,4 +1,5 @@
 import pyglet
+import tetris
 
 window = pyglet.window.Window(width=400,height=300)
 pyglet.gl.glClearColor(0.3, 0.8, 0.5, 1.0)
