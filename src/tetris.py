@@ -35,35 +35,38 @@ class Board:
         self.clearStandard = length
 
     def assign(self,positions,x,y):
-        self.grid = self.blockdata.copy()
+        
         for dx,dy in positions:
             if x+dx < 0 or x+dx > len(self.grid[0]) or y+dy < 0 or y+dy > len(self.grid):
                 self.brockdata = self.grid.copy()
+                print("---------------------")
+                print(self.blockdata)
+                raise Exception("Invalid position")
             else:
                 self.grid[y+dy][x+dx] += 1
 
+    def is_validmove(self,positions,x,y):
+        for dx,dy in positions:
+            if x+dx < 0 or x+dx > len(self.grid[0]) or y+dy < 0 or y+dy > len(self.grid):
+                return False
+        return True
+                
             
             
 
 class Game:
     def __init__(self):
         self.board = Board(10,20)
+        self.mino = Mino(3)
+        self.mino.self_generate()
 
 
     def update(self):
-        x=3
-        y=10
+        positions = self.mino.get_position()
+        self.board.is_validmove(positions,3,10)
+
         
-        while True:
-            self.mino = Mino(3)
-            self.mino.self_generate()
-            
-            positions = self.mino.get_position()
-            self.board.assign(positions,x,y)
-            print(self.board.grid)
-            time.sleep(0.25)
-            y -= 1
-        
+
 
 
 
