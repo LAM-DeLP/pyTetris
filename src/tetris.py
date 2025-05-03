@@ -38,8 +38,10 @@ class Mino:
 
 class Board:
     def __init__(self,length,height,ix,iy):
-        self.grid = numpy.zeros((height,length))
-        self.blockdata = numpy.zeros((height,length))
+        self.length = length
+        self.height = height
+        self.grid = numpy.zeros((self.height,self.length))
+        self.blockdata = numpy.zeros((self.height,self.length))
         self.clearStandard = length
         self.initcoord = [ix,iy]
         self.minocoord = [self.initcoord[0],self.initcoord[1]]
@@ -83,7 +85,11 @@ class Board:
             self.minocoord = [self.initcoord[0],self.initcoord[1]]
             for y,row in enumerate(self.blockdata):
                 if numpy.sum(self.blockdata[y])==10:
-                    self.blockdata[y]=0
+                    print("消去")
+                    self.blockdata =numpy.delete(self.blockdata,y,axis=0)
+                    print(self.blockdata)
+                    self.blockdata =numpy.insert(self.blockdata,0,[0,0,0,0,0,0,0,0,0,0],axis=0)
+
 
             return False
         else:
