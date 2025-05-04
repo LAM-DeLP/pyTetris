@@ -3,9 +3,7 @@ from pyglet import shapes
 import tetris
 
 tetrisApp = tetris.Game()
-
 window = pyglet.window.Window(width=540,height=720)
-
 pyglet.gl.glClearColor(0.3, 0.8, 0.5, 1.0)
 
 @window.event
@@ -18,7 +16,6 @@ def on_key_press(symbols, modifiers):
         tetrisApp.dy = 1
     if symbols == pyglet.window.key.UP:
         tetrisApp.is_rotate = True
-
 
 @window.event
 def on_draw():

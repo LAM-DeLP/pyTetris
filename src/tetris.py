@@ -41,7 +41,6 @@ class Board:
         self.height = height
         self.grid = numpy.zeros((self.height,self.length))
         self.blockdata = numpy.zeros((self.height,self.length))
-        self.clearStandard = length
         self.initcoord = [ix,iy]
         self.minocoord = [self.initcoord[0],self.initcoord[1]]
 
@@ -69,11 +68,9 @@ class Board:
             self.blockdata = numpy.copy(self.grid)
             self.minocoord = [self.initcoord[0],self.initcoord[1]]
             for y,row in enumerate(self.blockdata):
-                if numpy.sum(self.blockdata[y])==10:
+                if numpy.sum(self.blockdata[y])==self.length:
                     self.blockdata =numpy.delete(self.blockdata,y,axis=0)
                     self.blockdata =numpy.insert(self.blockdata,0,[0,0,0,0,0,0,0,0,0,0],axis=0)
-                    print(self.blockdata)
-                    print(self.grid)
             return False
         else:
             return True
@@ -81,9 +78,6 @@ class Board:
     def move_mino(self,dx,dy):
         self.minocoord[0] += dx
         self.minocoord[1] += dy
-
-    def get_minostate(self):
-        pass
 class Game:
     def __init__(self):
         self.board = Board(10,20,5,3)
