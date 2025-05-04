@@ -15,8 +15,10 @@ def on_key_press(symbols, modifiers):
     if symbols == pyglet.window.key.RIGHT:
         tetrisApp.dx = 1
     if symbols == pyglet.window.key.DOWN:
-        print("down")
         tetrisApp.dy = 1
+    if symbols == pyglet.window.key.UP:
+        tetrisApp.is_rotate = True
+
 
 @window.event
 def on_draw():
@@ -32,5 +34,4 @@ def on_draw():
                 rectangles.append(rect)
     
     batch.draw()
-# 0.5秒ごとに update を呼び出す
 pyglet.app.run()

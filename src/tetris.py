@@ -51,6 +51,8 @@ class Board:
             y = self.minocoord[1]+ry
             if x<0 or x>=len(self.grid[0]):
                 return False
+            if y<0 or y>=len(self.grid):
+                return False
             elif self.blockdata[y][x]==1:
                 return False
         return True          
@@ -59,6 +61,8 @@ class Board:
         for rx,ry in shape:
             x = self.minocoord[0]+rx
             y = self.minocoord[1]+ry+dy
+            if x<0 or x>=len(self.grid[0]):
+                return False
             if y<0 or y>=len(self.grid):
                 return False
             elif self.blockdata[y][x]==1:
@@ -79,7 +83,9 @@ class Board:
             for y,row in enumerate(self.blockdata):
                 if numpy.sum(self.blockdata[y])==10:
                     self.blockdata =numpy.delete(self.blockdata,y,axis=0)
-                    self.blockdata =numpy.insert(self.blockdata,0,numpy.zeros((10,1)),axis=0)
+                    self.blockdata =numpy.insert(self.blockdata,0,[0,0,0,0,0,0,0,0,0,0],axis=0)
+                    print(self.blockdata)
+                    print(self.grid)
             return False
         else:
             return True
@@ -98,6 +104,7 @@ class Game:
         self.mino.self_generate()
         self.flametime = 0
         self.dx,self.dy = 0,0
+        self.is_rotate = False
 
     def flamemanager(self,dx,dy,dt):
         if self.flametime > 100:
@@ -111,8 +118,13 @@ class Game:
         shape = self.mino.get_shape()
         lifetime = self.mino.get_lifetime()
 
-
-                
+        if self.is_rotate == True:
+            tempShape = numpy.copy(shape)
+            for i in range(len(tempShape)):
+                tempShape[i] = [-tempShape[i][1],tempShape[i][0]]
+            if self.board.x_validmove(tempShape,0) and self.board.y_validmove(tempShape,0):
+                self.mino.rotate()
+                self.is_rotate = False                
         if self.board.y_validmove(shape,1) == False:
             self.mino.decrease_lifetime(2)
             if self.board.is_fixed(lifetime) == False:
@@ -140,4 +152,3 @@ class Game:
 if __name__ == '__main__':
     game1 = Game()
     game1.update()
-    #回転も移動も何か返して妥当性を判定する
