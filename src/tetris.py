@@ -45,21 +45,9 @@ class Board:
         self.initcoord = [ix,iy]
         self.minocoord = [self.initcoord[0],self.initcoord[1]]
 
-    def x_validmove(self,shape,dx):
+    def validmove(self,shape,dx,dy):
         for rx,ry in shape:
             x = self.minocoord[0]+rx+dx
-            y = self.minocoord[1]+ry
-            if x<0 or x>=len(self.grid[0]):
-                return False
-            if y<0 or y>=len(self.grid):
-                return False
-            elif self.blockdata[y][x]==1:
-                return False
-        return True          
-        
-    def y_validmove(self,shape,dy):
-        for rx,ry in shape:
-            x = self.minocoord[0]+rx
             y = self.minocoord[1]+ry+dy
             if x<0 or x>=len(self.grid[0]):
                 return False
@@ -67,7 +55,7 @@ class Board:
                 return False
             elif self.blockdata[y][x]==1:
                 return False
-        return True
+        return True          
         
     def set_mino(self,shape):
         self.grid = numpy.copy(self.blockdata)
@@ -96,7 +84,6 @@ class Board:
 
     def get_minostate(self):
         pass
-
 class Game:
     def __init__(self):
         self.board = Board(10,20,5,3)
@@ -122,18 +109,18 @@ class Game:
             tempShape = numpy.copy(shape)
             for i in range(len(tempShape)):
                 tempShape[i] = [-tempShape[i][1],tempShape[i][0]]
-            if self.board.x_validmove(tempShape,0) and self.board.y_validmove(tempShape,0):
+            if self.board.validmove(tempShape,0,0):
                 self.mino.rotate()
                 self.is_rotate = False                
-        if self.board.y_validmove(shape,1) == False:
+        if self.board.validmove(shape,0,1) == False:
             self.mino.decrease_lifetime(2)
             if self.board.is_fixed(lifetime) == False:
                 self.mino.self_generate()
                 self.mino.reset_lifetime()
         else:
-            self.flamemanager(0,1,10)
+            self.flamemanager(0,1,5)
 
-        if self.board.y_validmove(shape,self.dy) == False:
+        if self.board.validmove(shape,0,self.dy) == False:
             self.mino.decrease_lifetime(2)
             if self.board.is_fixed(lifetime) == False:
                 self.mino.self_generate()
@@ -141,14 +128,10 @@ class Game:
         else:
             self.board.move_mino(0,self.dy)
 
-        if self.board.x_validmove(shape,self.dx)==False:
+        if self.board.validmove(shape,self.dx,0)==False:
             pass
         else:
             self.board.move_mino(self.dx,0)
 
         self.board.set_mino(shape)
         self.dx,self.dy = 0,0
-
-if __name__ == '__main__':
-    game1 = Game()
-    game1.update()
