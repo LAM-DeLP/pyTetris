@@ -39,8 +39,7 @@ class Board:
     def __init__(self,length,height,ix,iy):
         self.length = length
         self.height = height
-        self.grid = numpy.zeros((self.height,self.length))
-        self.blockdata = numpy.zeros((self.height,self.length))
+        self.grid,self.blockdata = numpy.zeros((self.height,self.length)),numpy.zeros((self.height,self.length))
         self.initcoord = [ix,iy]
         self.minocoord = [self.initcoord[0],self.initcoord[1]]
 
@@ -57,7 +56,7 @@ class Board:
         return True          
         
     def set_mino(self,shape):
-        self.grid = numpy.copy(self.blockdata)
+        self.grid[:] = self.blockdata
         for rx,ry in shape:
             x=self.minocoord[0]+rx
             y=self.minocoord[1]+ry
@@ -65,7 +64,7 @@ class Board:
 
     def is_fixed(self,lifetime):
         if lifetime<=0:
-            self.blockdata = numpy.copy(self.grid)
+            self.blockdata[:] = self.grid
             self.minocoord = [self.initcoord[0],self.initcoord[1]]
             for y,row in enumerate(self.blockdata):
                 if numpy.sum(self.blockdata[y])==self.length:
@@ -79,6 +78,7 @@ class Board:
         self.minocoord[0] += dx
         self.minocoord[1] += dy
 class Game:
+
     def __init__(self):
         self.board = Board(10,20,5,3)
         self.mino = Mino(3)
@@ -98,14 +98,14 @@ class Game:
 
         shape = self.mino.get_shape()
         lifetime = self.mino.get_lifetime()
-
         if self.is_rotate == True:
             tempShape = numpy.copy(shape)
             for i in range(len(tempShape)):
                 tempShape[i] = [-tempShape[i][1],tempShape[i][0]]
             if self.board.validmove(tempShape,0,0):
                 self.mino.rotate()
-                self.is_rotate = False                
+            self.is_rotate = False       
+                 
         if self.board.validmove(shape,0,1) == False:
             self.mino.decrease_lifetime(2)
             if self.board.is_fixed(lifetime) == False:
@@ -122,9 +122,7 @@ class Game:
         else:
             self.board.move_mino(0,self.dy)
 
-        if self.board.validmove(shape,self.dx,0)==False:
-            pass
-        else:
+        if self.board.validmove(shape,self.dx,0)==True:
             self.board.move_mino(self.dx,0)
 
         self.board.set_mino(shape)
