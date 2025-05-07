@@ -16,6 +16,12 @@ def on_key_press(symbols, modifiers):
         tetrisApp.dy = 1
     if symbols == pyglet.window.key.UP:
         tetrisApp.is_rotate = True
+@window.event
+def on_key_release(symbols, modifiers):
+    if symbols == pyglet.window.key.DOWN:
+        tetrisApp.dy = 0
+
+
 
 @window.event
 def on_draw():

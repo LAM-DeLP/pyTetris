@@ -124,6 +124,6 @@ class Game:
 
         if self.board.validmove(shape,self.dx,0)==True:
             self.board.move_mino(self.dx,0)
+        self.dx = 0
 
         self.board.set_mino(shape)
-        self.dx,self.dy = 0,0
